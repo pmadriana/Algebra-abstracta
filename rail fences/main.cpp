@@ -62,7 +62,5 @@ int main()
    string a=cifrar_diagonal("hola como estas", 4);
    cout<<a<<endl;
    cout<<descifrar(a, 4);
-
-
 }
 
