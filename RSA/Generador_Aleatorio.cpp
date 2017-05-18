@@ -6,30 +6,38 @@ void swap(int i, int j, vector<bool>a)
     a[i] = a[j];
     a[j] =temp;
 }
-void corrimiento_derecha(vector <bool> bin, int indice, int e_partes, int vueltas)
+void corrimiento_derecha(vector <bool> vec, int indice, int elementos, int vueltas)
 {
-    for(int j = vueltas; j > 0; j--)
+    srand(time(NULL));
+    int pos_aleatoria = rand()% elementos;
+    bool bit_ultimo= vec[(elementos*2)-1];
+    for(int j =vueltas; j > 0; j--)
     {
-        for(int i = e_partes + indice - 1; i > indice; i--)
-        {
-            swap(i, i-1, bin);
-        }
-    }
-//    for(int i=0; i<bin.size(); i++)
-//        cout<<bin[i];
-}
-
-void corrimiento_izquierda(vector <bool> vec, int indice, int elementos, int vueltas)
-{
-    for(int j = vueltas; j > 0; j--)
-    {
-        for(int i = indice; i < indice + elementos - 1; i++)
+        for(int i=(elementos*2)-1-indice ; i>= elementos; i--)
         {
             swap(i, i+1, vec);
         }
     }
-//     for(int i=0; i<vec.size(); i++)
+    bool x = vec[pos_aleatoria+elementos]^bit_ultimo; //pasar a aleatorio pe
+    vec[elementos]= x;
+//    for(int i=elementos; i<(elementos*2);i++)
 //        cout<<vec[i];
+}
+
+void corrimiento_izquierda(vector <bool> vec, int indice, int elementos, int vueltas)
+{
+    srand(time(NULL));
+    int pos_aleatoria = rand()% (elementos-1);
+    bool primero = vec[0];
+    for(int j = vueltas; j > 0; j--)
+    {
+        for(int i = 0; i<elementos-1-indice; i++)
+        {
+            swap(i, i+1, vec);
+        }
+    }
+    bool x= primero^vec[pos_aleatoria];
+    vec[elementos-1]=x;
 }
 
 ZZ decimal(vector <bool> b, int bits_num)
@@ -47,23 +55,28 @@ ZZ decimal(vector <bool> b, int bits_num)
     }
     return num;
 }
-
+int rdtsc() //rand de ciclos utilizados por procesador desde el inicio
+{
+    __asm__ __volatile__("rdtsc");
+}
 ZZ generador(int t_seed, int t_bits, int particiones, int vueltas)
 {
-    ZZ seed_aleatoria;
-    seed_aleatoria=RandomLen_ZZ(t_seed);
-//    cout<<seed_aleatoria<<endl;
     vector <bool>binario;
+    bool aleatorio_bit_seed= 0;
     for(int i = 0; i < t_bits; i++)
     {
         binario.push_back(0); //llenamos el vector
     }
-    int j=0, s=0;   //j pos vector ,s recorre
-    for(int i = t_seed-1; i >=0; i--) //i, long bit
+    int s=0;   //j pos vector ,s recorre
+    for(int i = 0 ; i<t_seed; i++)
     {
-        binario[j] = bit(seed_aleatoria,i); // extraer bit
-        j++;
+        srand(rdtsc());
+        aleatorio_bit_seed= rand()%2;
+        binario[i]= aleatorio_bit_seed;
+        if(binario[0]==0)
+            binario[0]=1;
     }
+
     for(int i = t_seed; i < t_bits; i++)
     {
         binario[i] = binario[s] ^ binario[s+1]; //concatenar xor
