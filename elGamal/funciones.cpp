@@ -204,7 +204,7 @@ ZZ find_gen(ZZ p){
 		g = p - i;
 		if ((modulo(g*g, p) != 1) && (expo_modular(g, q, p) != 1)){
 //			found=to_ZZ(1);
-        break;
+       			 break;
 		}
 	}
 //	}
